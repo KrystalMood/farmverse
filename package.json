@@ -1,0 +1,60 @@
+{
+  "name": "farmverse",
+  "version": "0.1.0",
+  "private": true,
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev -p 3600 --turbopack",
+    "lint": "next lint",
+    "start": "next start",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^3.1.0",
+    "@mdx-js/react": "^3.1.0",
+    "@next/mdx": "^15.3.1",
+    "@types/mdx": "^2.0.13",
+    "next": "15.3.0",
+    "next-auth": "^4.24.11",
+    "prisma": "^6.6.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "@prisma/client": "^6.6.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "bcrypt": "^5.1.1",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "15.3.0",
+    "google-auth-library": "^9.15.1",
+    "gsap": "^3.12.7",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jose": "^6.0.10",
+    "lucide-react": "^0.487.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "react-icons": "^5.5.0",
+    "tailwindcss": "^4.1.4",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "zod": "^3.24.3"
+  }
+}
