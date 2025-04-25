@@ -57,9 +57,22 @@ const google: AuthOptions = {
     },
     async session({ session, token }) {
       if (session.user && token) {
-        session.user.role = token.role as string;
-        session.user.id_session = token.id_user as string;
-        session.user.session_token = token.session_token as string;
+        if (token.role) session.user.role = token.role as string;
+        if (token.id_user) session.user.id_session = token.id_user as string;
+        
+        if (token.id_user) {
+          try {
+            const dbSession = await Prisma.sessions.findFirst({ 
+              where: { id_user: token.id_user as string } 
+            });
+            if (dbSession?.token) {
+              session.user.session_token = dbSession.token;
+              session.user.token = dbSession.token;
+            }
+          } catch (error) {
+            console.error("Error retrieving session token:", error);
+          }
+        }
       }
       return session;
     },

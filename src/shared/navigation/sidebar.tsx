@@ -1,45 +1,81 @@
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect } from "react";
+import { useEffect } from "react";
 import { Home, Package, Users, LogOut } from "lucide-react";
 import { Logout } from "@/actions/logout";
 import Form from "next/form";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import AdminSidebar from "./sidebars/admin-sidebar";
+import FarmerSidebar from "./sidebars/farmer-sidebar";
+import BankSidebar from "./sidebars/bank-sidebar";
+import CustomerSidebar from "./sidebars/customer-sidebar";
+
 
 export default function Sidebar() {
-  const [state, action] = useActionState(Logout, { oauth: false, redirect: "" });
-  const router = useRouter();
-
+  const { data: session, status } = useSession();
+  const router = useRouter(); 
+  const userRole = session?.user?.role;
+  
+  if (process.env.NODE_ENV !== "production") {
+    console.log("Session status:", status);
+    console.log("Session data:", session);
+    console.log("User role:", userRole);
+  }
+  
   useEffect(() => {
-    if (state.redirect) router.push(state.redirect);
-  }, [router, state]);
+    if (!session && status !== "loading") {
+      const timer = setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [session, status, router]);
+  
+  if (status === "loading") {
+    return (
+      <div className="h-screen w-64 bg-white p-4 shadow-md">
+        <div className="flex h-full items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-t-2 border-gray-300 border-t-blue-500 mx-auto"></div>
+            <p>Loading sidebar...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!session || !session.user) {
+    return (
+      <div className="h-screen w-64 bg-white p-4 shadow-md">
+        <div className="flex h-full flex-col items-center justify-center">
+          <p className="mb-2 text-red-500">Sesi tidak ditemukan</p>
+          <p className="text-sm text-gray-500">Mengalihkan ke halaman login...</p>
+        </div>
+      </div>
+    );
+  }
 
-  return (
-    <aside className="fixed top-1/2 left-6 z-30 hidden h-[95svh] w-20 -translate-y-1/2 flex-col items-center rounded-xl border-2 border-emerald-800 bg-emerald-900 p-4 shadow-2xl transition-all duration-300 ease-in-out lg:flex">
-      <section className="mb-4">
-        <Image
-          src="/favicon.ico"
-          alt="Logo"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-      </section>
-      <section className="flex flex-grow flex-col items-center justify-center space-y-6">
-        <button className="text-white transition hover:text-emerald-300">
-          <Home size={24} />
-        </button>
-        <button className="text-white transition hover:text-emerald-300">
-          <Package size={24} />
-        </button>
-        <button className="text-white transition hover:text-emerald-300">
-          <Users size={24} />
-        </button>
-      </section>
-      <Form action={action} className="mt-4">
-        <button type="submit" className="text-white transition hover:text-red-400">
-          <LogOut size={20} />
-        </button>
-      </Form>
-    </aside>
-  );
+  switch (userRole) {
+    case "ADMIN":
+      return <AdminSidebar />;
+    case "FARMER":
+      return <FarmerSidebar />;
+    case "BANK":
+      return <BankSidebar />;
+    case "CUSTOMER":
+      return <CustomerSidebar />;
+    default:
+      console.log(`Tidak ada role yang cocok ditemukan: ${userRole}`);
+      return (
+        <div className="h-screen w-64 bg-white p-4 shadow-md">
+          <div className="flex h-full items-center justify-center">
+            <p className="text-center text-gray-500">
+              Role tidak dikenali: {userRole || "tidak ada"}.<br/>
+              Silakan hubungi administrator.
+            </p>
+          </div>
+        </div>
+      );
+  }
 }

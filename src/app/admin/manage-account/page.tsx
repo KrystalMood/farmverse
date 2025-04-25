@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "",
+  title: "Kelola Akun",
   description: "",
   openGraph: {
     title: "",

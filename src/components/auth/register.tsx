@@ -1,10 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useActionState, useEffect } from "react";
 import { LockKeyhole, Mail, ShieldCheck, SquareUser, User } from "lucide-react";
-import { FaGoogle } from "react-icons/fa6";
 import { Register as Actions } from "@/actions/register";
 import Form from "next/form";
 import Text from "@/shared/form/text";
@@ -21,6 +19,9 @@ export function Register() {
 
   return (
     <section className="bg-gradient-to-lr mx-auto flex w-4/5 flex-col items-center justify-center from-[#a9d6ff] to-[#edf2f7] bg-cover bg-center bg-no-repeat py-12 text-black lg:w-[65%]">
+      {state.error?.form && (
+        <h5 className="mb-4 text-sm text-red-500">{state.error.form}</h5>
+      )}
       <h3 className="cursor-default text-xl font-bold text-[#1a4167] lg:text-2xl">
         Selamat datang 🌿
       </h3>
@@ -88,19 +89,6 @@ export function Register() {
           {pending ? "Memuat..." : "Daftar"}
         </button>
       </Form>
-      <div className="mt-6 flex w-full items-center">
-        <span className="flex-grow border-t border-gray-300" />
-        <h5 className="mx-4 text-sm text-gray-500">ATAU</h5>
-        <span className="flex-grow border-t border-gray-300" />
-      </div>
-      <button
-        type="button"
-        onClick={() => signIn("google")}
-        className="mt-6 flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none"
-      >
-        <FaGoogle />
-        <h5>Google</h5>
-      </button>
       <h5 className="mt-8 cursor-default text-center text-sm text-gray-500">
         &copy; {new Date().getFullYear()} Farmverse
       </h5>

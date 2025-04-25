@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
     viewTransition: true,
+    serverActions: true,
   },
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   reactStrictMode: true,

@@ -1,14 +1,13 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { LockKeyhole, Mail } from "lucide-react";
-import { FaGoogle } from "react-icons/fa6";
 import { Login as Actions } from "@/actions/login";
 import Form from "next/form";
 import Link from "next/link";
 import Text from "@/shared/form/text";
+import { toast } from "sonner";
 
 // prettier-ignore
 export function Login() {
@@ -17,6 +16,11 @@ export function Login() {
 
   useEffect(() => {
     if (typeof state?.redirect === "string") router.push(state.redirect);
+    if (state.error?.form) {
+      toast.error(state.error.form);
+    } else if (typeof state?.redirect === "string") {
+      toast.success("Berhasil masuk!");
+    }
   }, [router, state]);
 
   return (
@@ -63,19 +67,6 @@ export function Login() {
           Lupa Kata Sandi?
         </Link>
       </div>
-      <div className="mt-10 flex w-full items-center">
-        <span className="flex-grow border-t border-gray-300" />
-        <h5 className="mx-4 text-sm text-gray-500">ATAU</h5>
-        <span className="flex-grow border-t border-gray-300" />
-      </div>
-      <button
-        type="button"
-        onClick={() => signIn("google")}
-        className="mt-6 flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-colors duration-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none lg:hover:bg-gray-100"
-      >
-        <FaGoogle />
-        <h5>Google</h5>
-      </button>
       <h5 className="mt-8 cursor-default text-center text-sm text-gray-500">
         &copy; {new Date().getFullYear()} Farmverse
       </h5>
